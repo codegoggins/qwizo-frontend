@@ -1,6 +1,6 @@
 "use client"
 
-import { RiMenuLine, RiNotification3Line, RiUserLine } from "react-icons/ri"
+import { RiMenuLine, RiNotification3Line, RiUserLine, RiLogoutBoxRLine } from "react-icons/ri"
 
 function Header({ onMenuClick }: { onMenuClick: () => void }) {
   return (
@@ -27,6 +27,12 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="flex size-9 items-center justify-center border-2 border-neo-black bg-primary shadow-[2px_2px_0px_0px_#1B1B1B]">
           <RiUserLine className="size-4 text-primary-foreground" />
         </div>
+        <button
+          type="button"
+          className="flex size-9 items-center justify-center border-2 border-neo-black bg-background hover:bg-destructive hover:text-white"
+        >
+          <RiLogoutBoxRLine className="size-4" />
+        </button>
       </div>
     </header>
   )

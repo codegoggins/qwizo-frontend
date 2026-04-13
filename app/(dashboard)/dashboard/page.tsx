@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { motion } from "framer-motion"
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   RiVipCrownLine,
   RiFileListLine,
@@ -14,17 +14,17 @@ import {
   RiMoreLine,
   RiEditLine,
   RiDeleteBinLine,
-} from "react-icons/ri"
-import { Button } from "@/components/ui/button"
+} from "react-icons/ri";
+import { Button } from "@/components/ui/button";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
-}
+};
 
 const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
-}
+};
 
 const stats = [
   {
@@ -55,29 +55,76 @@ const stats = [
     icon: RiVipCrownLine,
     color: "#C184FD",
   },
-]
+];
 
 const quickActions = [
-  { label: "Create Quiz", href: "/dashboard/quizzes/create", icon: RiAddCircleLine },
-  { label: "Upload Document", href: "/dashboard/upload", icon: RiUploadCloud2Line },
-  { label: "View Analytics", href: "/dashboard/analytics", icon: RiLineChartLine },
+  {
+    label: "Create Quiz",
+    href: "/dashboard/quizzes/create",
+    icon: RiAddCircleLine,
+  },
+  {
+    label: "Upload Document",
+    href: "/dashboard/upload",
+    icon: RiUploadCloud2Line,
+  },
+  {
+    label: "View Analytics",
+    href: "/dashboard/analytics",
+    icon: RiLineChartLine,
+  },
   { label: "Share Quiz", href: "/dashboard/quizzes", icon: RiShareLine },
-]
+];
 
 const recentQuizzes = [
-  { id: "1", title: "JavaScript Basics", status: "published", questions: 15, attempts: 234, date: "Apr 10, 2026" },
-  { id: "2", title: "React Fundamentals", status: "published", questions: 20, attempts: 189, date: "Apr 8, 2026" },
-  { id: "3", title: "System Design 101", status: "draft", questions: 10, attempts: 0, date: "Apr 7, 2026" },
-  { id: "4", title: "Python for Beginners", status: "published", questions: 25, attempts: 97, date: "Apr 5, 2026" },
-  { id: "5", title: "CSS Grid & Flexbox", status: "draft", questions: 8, attempts: 0, date: "Apr 3, 2026" },
-]
+  {
+    id: "1",
+    title: "JavaScript Basics",
+    status: "published",
+    questions: 15,
+    attempts: 234,
+    date: "Apr 10, 2026",
+  },
+  {
+    id: "2",
+    title: "React Fundamentals",
+    status: "published",
+    questions: 20,
+    attempts: 189,
+    date: "Apr 8, 2026",
+  },
+  {
+    id: "3",
+    title: "System Design 101",
+    status: "draft",
+    questions: 10,
+    attempts: 0,
+    date: "Apr 7, 2026",
+  },
+  {
+    id: "4",
+    title: "Python for Beginners",
+    status: "published",
+    questions: 25,
+    attempts: 97,
+    date: "Apr 5, 2026",
+  },
+  {
+    id: "5",
+    title: "CSS Grid & Flexbox",
+    status: "draft",
+    questions: 8,
+    attempts: 0,
+    date: "Apr 3, 2026",
+  },
+];
 
 const recentActivity = [
   { text: "Alex scored 95% on JavaScript Basics", time: "2 min ago" },
   { text: "Jordan completed React Fundamentals", time: "15 min ago" },
   { text: "You published Python for Beginners", time: "1 hour ago" },
   { text: "Sam scored 68% on JavaScript Basics", time: "3 hours ago" },
-]
+];
 
 export default function DashboardPage() {
   return (
@@ -87,8 +134,12 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-extrabold tracking-tight">Welcome back, John</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Here&apos;s what&apos;s happening with your quizzes.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight">
+          Welcome back, John
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Here&apos;s what&apos;s happening with your quizzes.
+        </p>
       </motion.div>
 
       <motion.div
@@ -111,9 +162,15 @@ export default function DashboardPage() {
               <stat.icon className="size-6 text-neo-black" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-muted-foreground">{stat.label}</p>
-              <p className="text-2xl font-extrabold tracking-tight">{stat.value}</p>
-              <p className="text-[11px] text-muted-foreground">{stat.sublabel}</p>
+              <p className="text-xs font-semibold text-muted-foreground">
+                {stat.label}
+              </p>
+              <p className="text-2xl font-extrabold tracking-tight">
+                {stat.value}
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                {stat.sublabel}
+              </p>
             </div>
           </motion.div>
         ))}
@@ -126,10 +183,14 @@ export default function DashboardPage() {
         animate="visible"
       >
         {quickActions.map((action) => (
-          <motion.div key={action.label} variants={fadeUp} transition={{ duration: 0.4 }}>
+          <motion.div
+            key={action.label}
+            variants={fadeUp}
+            transition={{ duration: 0.4 }}
+          >
             <Link
               href={action.href}
-              className="flex items-center gap-3 rounded-xl border-2 border-neo-black bg-background px-5 py-4 font-semibold shadow-[3px_3px_0px_0px_#1B1B1B] transition-all hover:shadow-[1px_1px_0px_0px_#1B1B1B] hover:translate-x-[2px] hover:translate-y-[2px]"
+              className="flex items-center gap-3 rounded-xl border-2 border-neo-black bg-background px-5 py-4 font-semibold shadow-[3px_3px_0px_0px_#1B1B1B] transition-all hover:shadow-[1px_1px_0px_0px_#1B1B1B] hover:translate-x-0.5 hover:translate-y-0.5"
             >
               <action.icon className="size-5 text-primary" />
               {action.label}
@@ -149,7 +210,9 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between border-b-2 border-neo-black px-5 py-4">
               <h2 className="text-lg font-bold">Recent Quizzes</h2>
               <Link href="/dashboard/quizzes">
-                <Button variant="ghost" size="sm">View all</Button>
+                <Button variant="ghost" size="sm">
+                  View all
+                </Button>
               </Link>
             </div>
             <div className="overflow-x-auto">
@@ -179,16 +242,27 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-5 py-3">{quiz.questions}</td>
                       <td className="px-5 py-3">{quiz.attempts}</td>
-                      <td className="px-5 py-3 text-muted-foreground">{quiz.date}</td>
+                      <td className="px-5 py-3 text-muted-foreground">
+                        {quiz.date}
+                      </td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-1">
-                          <button type="button" className="p-1 text-muted-foreground hover:text-foreground">
+                          <button
+                            type="button"
+                            className="p-1 text-muted-foreground hover:text-foreground"
+                          >
                             <RiEditLine className="size-4" />
                           </button>
-                          <button type="button" className="p-1 text-muted-foreground hover:text-destructive">
+                          <button
+                            type="button"
+                            className="p-1 text-muted-foreground hover:text-destructive"
+                          >
                             <RiDeleteBinLine className="size-4" />
                           </button>
-                          <button type="button" className="p-1 text-muted-foreground hover:text-foreground">
+                          <button
+                            type="button"
+                            className="p-1 text-muted-foreground hover:text-foreground"
+                          >
                             <RiMoreLine className="size-4" />
                           </button>
                         </div>
@@ -217,7 +291,9 @@ export default function DashboardPage() {
                 <div className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
                 <div>
                   <p className="text-sm font-medium">{activity.text}</p>
-                  <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {activity.time}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -225,7 +301,7 @@ export default function DashboardPage() {
         </div>
       </motion.div>
     </div>
-  )
+  );
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -239,5 +315,5 @@ function StatusBadge({ status }: { status: string }) {
     >
       {status === "published" ? "Published" : "Draft"}
     </span>
-  )
+  );
 }
