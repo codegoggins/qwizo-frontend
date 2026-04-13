@@ -2,13 +2,28 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri"
 import { FcGoogle } from "react-icons/fc"
+import { loginSchema, type LoginFormData } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  })
+
+  function onSubmit(data: LoginFormData) {
+    console.log(data)
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -30,12 +45,15 @@ export default function LoginPage() {
         <div className="h-px flex-1 bg-border" />
       </div>
 
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-1.5">
           <label htmlFor="email" className="text-sm font-semibold">
             Email
           </label>
-          <Input id="email" type="email" placeholder="john@example.com" />
+          <Input id="email" type="email" placeholder="john@example.com" {...register("email")} />
+          {errors.email && (
+            <p className="text-xs text-destructive">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -48,6 +66,7 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               className="pr-10"
+              {...register("password")}
             />
             <button
               type="button"
@@ -57,6 +76,9 @@ export default function LoginPage() {
               {showPassword ? <RiEyeOffLine className="size-4" /> : <RiEyeLine className="size-4" />}
             </button>
           </div>
+          {errors.password && (
+            <p className="text-xs text-destructive">{errors.password.message}</p>
+          )}
         </div>
 
         <Link href="/forgot-password" className="self-end text-xs font-medium text-primary hover:underline">

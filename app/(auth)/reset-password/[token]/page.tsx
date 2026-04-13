@@ -4,72 +4,61 @@ import { useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { RiEyeLine, RiEyeOffLine } from "react-icons/ri"
-import { FcGoogle } from "react-icons/fc"
-import { registerSchema, type RegisterFormData } from "@/lib/validations/auth"
+import { RiEyeLine, RiEyeOffLine, RiCheckLine } from "react-icons/ri"
+import { resetPasswordSchema, type ResetPasswordFormData } from "@/lib/validations/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-export default function RegisterPage() {
+export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
   })
 
-  function onSubmit(data: RegisterFormData) {
+  function onSubmit(data: ResetPasswordFormData) {
     console.log(data)
+    setSubmitted(true)
+  }
+
+  if (submitted) {
+    return (
+      <div className="flex flex-col items-center gap-6 text-center">
+        <div className="flex size-16 items-center justify-center border-2 border-neo-black bg-success shadow-[4px_4px_0px_0px_#1B1B1B]">
+          <RiCheckLine className="size-8 text-neo-black" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">Password updated</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Your password has been reset successfully.
+          </p>
+        </div>
+        <Link href="/login">
+          <Button>Back to login</Button>
+        </Link>
+      </div>
+    )
   }
 
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">Create an account</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">Reset password</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Start creating AI-powered quizzes in seconds.
+          Enter your new password below.
         </p>
-      </div>
-
-      <Button variant="outline" className="w-full gap-2 font-semibold normal-case">
-        <FcGoogle className="size-5" />
-        Continue with Google
-      </Button>
-
-      <div className="flex items-center gap-4">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-xs font-medium text-muted-foreground">OR</span>
-        <div className="h-px flex-1 bg-border" />
       </div>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="username" className="text-sm font-semibold">
-            Username
-          </label>
-          <Input id="username" placeholder="johndoe" {...register("username")} />
-          {errors.username && (
-            <p className="text-xs text-destructive">{errors.username.message}</p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="email" className="text-sm font-semibold">
-            Email
-          </label>
-          <Input id="email" type="email" placeholder="john@example.com" {...register("email")} />
-          {errors.email && (
-            <p className="text-xs text-destructive">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
           <label htmlFor="password" className="text-sm font-semibold">
-            Password
+            New Password
           </label>
           <div className="relative">
             <Input
@@ -118,16 +107,9 @@ export default function RegisterPage() {
         </div>
 
         <Button type="submit" className="mt-2 w-full">
-          Create Account
+          Reset Password
         </Button>
       </form>
-
-      <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-primary hover:underline">
-          Log in
-        </Link>
-      </p>
     </div>
   )
 }
