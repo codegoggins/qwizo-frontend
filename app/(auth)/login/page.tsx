@@ -30,7 +30,7 @@ export default function LoginPage() {
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight">Welcome back</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Log in to your Qwizo account.
+          Log in to your qwizo account.
         </p>
       </div>
 

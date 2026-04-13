@@ -36,7 +36,7 @@ export default function ComponentsPage() {
     <div className="flex flex-1 flex-col gap-16 p-8 md:p-16 max-w-4xl mx-auto w-full">
       <div>
         <h1 className="text-4xl font-extrabold tracking-tight">Components</h1>
-        <p className="mt-2 text-muted-foreground">Neo-brutalist UI kit for Qwizo.</p>
+        <p className="mt-2 text-muted-foreground">Neo-brutalist UI kit for qwizo.</p>
       </div>
 
       <section className="flex flex-col gap-4">

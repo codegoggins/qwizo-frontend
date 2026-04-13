@@ -12,7 +12,7 @@ export default function AuthLayout({
         <Logo className="absolute top-8 left-8 z-10" />
         <Image
           src="/assets/auth_bg.png"
-          alt="Qwizo"
+          alt="qwizo"
           width={500}
           height={500}
           className="max-h-[90vh] w-full object-contain"

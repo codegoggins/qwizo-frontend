@@ -9,9 +9,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Qwizo — Turn Documents into AI-Powered Quizzes Instantly",
+  title: "qwizo — Turn Documents into AI-Powered Quizzes Instantly",
   description:
-    "Qwizo converts your documents into interactive AI-generated quizzes in seconds. Share public quiz links, track scores on real-time leaderboards, and challenge anyone — all for free.",
+    "qwizo converts your documents into interactive AI-generated quizzes in seconds. Share public quiz links, track scores on real-time leaderboards, and challenge anyone — all for free.",
   keywords: [
     "AI quiz generator",
     "document to quiz",
@@ -24,17 +24,17 @@ export const metadata: Metadata = {
     "AI-powered quizzes",
     "automatic quiz generation",
   ],
-  authors: [{ name: "Qwizo" }],
+  authors: [{ name: "qwizo" }],
   openGraph: {
-    title: "Qwizo — Turn Documents into AI-Powered Quizzes Instantly",
+    title: "qwizo — Turn Documents into AI-Powered Quizzes Instantly",
     description:
       "Upload any document and let AI generate quizzes automatically. Share via public links, compete on real-time leaderboards, and track scores live.",
     type: "website",
-    siteName: "Qwizo",
+    siteName: "qwizo",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Qwizo — Turn Documents into AI-Powered Quizzes Instantly",
+    title: "qwizo — Turn Documents into AI-Powered Quizzes Instantly",
     description:
       "Upload any document and let AI generate quizzes automatically. Share via public links, compete on real-time leaderboards, and track scores live.",
   },
