@@ -11,10 +11,7 @@ import {
   RiBookmarkLine,
   RiSearchLine,
   RiEditLine,
-  RiDeleteBinLine,
-  RiShareLine,
-  RiFileCopyLine,
-  RiMoreLine,
+  RiSettingsLine,
   RiArrowLeftSLine,
   RiArrowRightSLine,
   RiTrophyLine,
@@ -256,15 +253,12 @@ export default function QuizzesPage() {
                           <Link href={`/dashboard/quizzes/${quiz.id}/edit`} title="Edit" className="p-1 text-muted-foreground hover:text-foreground">
                             <RiEditLine className="size-4" />
                           </Link>
-                          <button type="button" title="Share" className="p-1 text-muted-foreground hover:text-foreground">
-                            <RiShareLine className="size-4" />
-                          </button>
-                          <button type="button" title="Duplicate" className="p-1 text-muted-foreground hover:text-foreground">
-                            <RiFileCopyLine className="size-4" />
-                          </button>
-                          <button type="button" title="Delete" className="p-1 text-muted-foreground hover:text-destructive">
-                            <RiDeleteBinLine className="size-4" />
-                          </button>
+                          <Link href={`/dashboard/quizzes/${quiz.id}/preview`} title="Preview" className="p-1 text-muted-foreground hover:text-foreground">
+                            <RiEyeLine className="size-4" />
+                          </Link>
+                          <Link href={`/dashboard/quizzes/${quiz.id}/settings`} title="Settings" className="p-1 text-muted-foreground hover:text-foreground">
+                            <RiSettingsLine className="size-4" />
+                          </Link>
                         </div>
                       </td>
                     </motion.tr>
@@ -315,6 +309,7 @@ export default function QuizzesPage() {
           </>
         )}
       </motion.div>
+
     </div>
   )
 }
