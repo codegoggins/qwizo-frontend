@@ -12,6 +12,7 @@ import type { Question } from "@/lib/types/quiz"
 import { addOptionToQuestion } from "@/lib/quiz-helpers"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 const typeLabels: Record<string, { label: string; color: string }> = {
   mcq: { label: "MCQ", color: "#E56498" },
@@ -82,17 +83,14 @@ function QuestionCard({ question, index, isFirst, isLast, onUpdate, onDelete, on
           <span className="flex size-7 items-center justify-center rounded-md border-2 border-neo-black bg-secondary text-xs font-bold">
             {index + 1}
           </span>
-          <span
-            className="rounded-md border-2 border-neo-black px-2 py-0.5 text-xs font-bold text-white"
-            style={{ backgroundColor: typeInfo.color }}
-          >
+          <Badge className="text-white" style={{ backgroundColor: typeInfo.color }}>
             {typeInfo.label}
-          </span>
+          </Badge>
           {question.source === "ai" && (
-            <span className="flex items-center gap-1 rounded-md border-2 border-neo-black bg-secondary px-2 py-0.5 text-xs font-bold">
+            <Badge variant="default">
               <RiSparklingLine className="size-3" />
               AI
-            </span>
+            </Badge>
           )}
         </div>
         <div className="flex items-center gap-1">

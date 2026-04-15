@@ -14,6 +14,7 @@ import {
   RiInformationLine,
 } from "react-icons/ri";
 import type { AiHistoryEntry, MediaDocument, Question } from "@/lib/types/quiz";
+import { Badge } from "@/components/ui/badge";
 
 const tabs = ["Overview", "AI History", "Documents"] as const;
 type Tab = (typeof tabs)[number];
@@ -99,11 +100,9 @@ function QuizInfoPanel({
             >
               <div className="flex items-center justify-between rounded-lg border-2 border-neo-black bg-secondary p-3">
                 <span className="text-xs font-semibold text-muted-foreground">Status</span>
-                <span className={`rounded-md border-2 border-neo-black px-2 py-0.5 text-xs font-bold ${
-                  status === "published" ? "bg-success text-neo-black" : "bg-muted text-muted-foreground"
-                }`}>
+                <Badge variant={status === "published" ? "success" : "warning"}>
                   {status.charAt(0).toUpperCase() + status.slice(1)}
-                </span>
+                </Badge>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

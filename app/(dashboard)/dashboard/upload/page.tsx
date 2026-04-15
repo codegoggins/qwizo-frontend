@@ -13,6 +13,7 @@ import {
   RiArrowRightLine,
 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 
@@ -166,9 +167,9 @@ export default function UploadDocumentPage() {
           >
             <div className="flex items-center justify-between border-b-2 border-neo-black px-5 py-4">
               <h2 className="text-lg font-bold">Uploaded Files</h2>
-              <span className="rounded-md border-2 border-neo-black bg-secondary px-2.5 py-1 text-xs font-bold">
+              <Badge variant="default" className="px-2.5 py-1">
                 {files.length} {files.length === 1 ? "file" : "files"}
-              </span>
+              </Badge>
             </div>
             <div className="flex flex-col">
               <AnimatePresence>

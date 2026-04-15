@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { type ColumnDef } from "@tanstack/react-table";
 import {
   RiVipCrownLine,
   RiFileListLine,
@@ -11,11 +12,13 @@ import {
   RiUploadCloud2Line,
   RiLineChartLine,
   RiShareLine,
-  RiMoreLine,
   RiEditLine,
-  RiDeleteBinLine,
+  RiEyeLine,
+  RiSettingsLine,
 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { DataTable } from "@/components/ui/data-table";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -27,95 +30,69 @@ const stagger = {
 };
 
 const stats = [
-  {
-    label: "Total Quizzes",
-    value: "12",
-    sublabel: "+3 this week",
-    icon: RiFileListLine,
-    color: "#21D3ED",
-  },
-  {
-    label: "Total Attempts",
-    value: "1,284",
-    sublabel: "+156 this week",
-    icon: RiGroupLine,
-    color: "#A3E634",
-  },
-  {
-    label: "Avg Score",
-    value: "74%",
-    sublabel: "Across all quizzes",
-    icon: RiBarChartLine,
-    color: "#FFB32F",
-  },
-  {
-    label: "Plan",
-    value: "Free",
-    sublabel: "Upgrade for more",
-    icon: RiVipCrownLine,
-    color: "#C184FD",
-  },
+  { label: "Total Quizzes", value: "12", sublabel: "+3 this week", icon: RiFileListLine, color: "#21D3ED" },
+  { label: "Total Attempts", value: "1,284", sublabel: "+156 this week", icon: RiGroupLine, color: "#A3E634" },
+  { label: "Avg Score", value: "74%", sublabel: "Across all quizzes", icon: RiBarChartLine, color: "#FFB32F" },
+  { label: "Plan", value: "Free", sublabel: "Upgrade for more", icon: RiVipCrownLine, color: "#C184FD" },
 ];
 
 const quickActions = [
-  {
-    label: "Create Quiz",
-    href: "/dashboard/quizzes/create",
-    icon: RiAddCircleLine,
-  },
-  {
-    label: "Upload Document",
-    href: "/dashboard/upload",
-    icon: RiUploadCloud2Line,
-  },
-  {
-    label: "View Analytics",
-    href: "/dashboard/analytics",
-    icon: RiLineChartLine,
-  },
+  { label: "Create Quiz", href: "/dashboard/quizzes/create", icon: RiAddCircleLine },
+  { label: "Upload Document", href: "/dashboard/upload", icon: RiUploadCloud2Line },
+  { label: "View Analytics", href: "/dashboard/analytics", icon: RiLineChartLine },
   { label: "Share Quiz", href: "/dashboard/quizzes", icon: RiShareLine },
 ];
 
-const recentQuizzes = [
+interface RecentQuiz {
+  id: string;
+  title: string;
+  status: string;
+  questions: number;
+  attempts: number;
+  date: string;
+}
+
+const recentQuizzes: RecentQuiz[] = [
+  { id: "1", title: "JavaScript Basics", status: "published", questions: 15, attempts: 234, date: "Apr 10, 2026" },
+  { id: "2", title: "React Fundamentals", status: "published", questions: 20, attempts: 189, date: "Apr 8, 2026" },
+  { id: "3", title: "System Design 101", status: "draft", questions: 10, attempts: 0, date: "Apr 7, 2026" },
+  { id: "4", title: "Python for Beginners", status: "published", questions: 25, attempts: 97, date: "Apr 5, 2026" },
+  { id: "5", title: "CSS Grid & Flexbox", status: "draft", questions: 8, attempts: 0, date: "Apr 3, 2026" },
+];
+
+const quizColumns: ColumnDef<RecentQuiz, unknown>[] = [
+  { accessorKey: "title", header: "Title", cell: ({ getValue }) => <span className="font-medium">{getValue() as string}</span> },
   {
-    id: "1",
-    title: "JavaScript Basics",
-    status: "published",
-    questions: 15,
-    attempts: 234,
-    date: "Apr 10, 2026",
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ getValue }) => {
+      const status = getValue() as string;
+      return (
+        <Badge variant={status === "published" ? "success" : "warning"}>
+          {status === "published" ? "Published" : "Draft"}
+        </Badge>
+      );
+    },
   },
+  { accessorKey: "questions", header: "Questions" },
+  { accessorKey: "attempts", header: "Attempts" },
+  { accessorKey: "date", header: "Date", cell: ({ getValue }) => <span className="text-muted-foreground">{getValue() as string}</span> },
   {
-    id: "2",
-    title: "React Fundamentals",
-    status: "published",
-    questions: 20,
-    attempts: 189,
-    date: "Apr 8, 2026",
-  },
-  {
-    id: "3",
-    title: "System Design 101",
-    status: "draft",
-    questions: 10,
-    attempts: 0,
-    date: "Apr 7, 2026",
-  },
-  {
-    id: "4",
-    title: "Python for Beginners",
-    status: "published",
-    questions: 25,
-    attempts: 97,
-    date: "Apr 5, 2026",
-  },
-  {
-    id: "5",
-    title: "CSS Grid & Flexbox",
-    status: "draft",
-    questions: 8,
-    attempts: 0,
-    date: "Apr 3, 2026",
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1">
+        <Link href={`/dashboard/quizzes/${row.original.id}/edit`} className="p-1 text-muted-foreground hover:text-foreground">
+          <RiEditLine className="size-4" />
+        </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/preview`} className="p-1 text-muted-foreground hover:text-foreground">
+          <RiEyeLine className="size-4" />
+        </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/settings`} className="p-1 text-muted-foreground hover:text-foreground">
+          <RiSettingsLine className="size-4" />
+        </Link>
+      </div>
+    ),
   },
 ];
 
@@ -134,12 +111,8 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-3xl font-extrabold tracking-tight">
-          Welcome back, John
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Here&apos;s what&apos;s happening with your quizzes.
-        </p>
+        <h1 className="text-3xl font-extrabold tracking-tight">Welcome back, John</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Here&apos;s what&apos;s happening with your quizzes.</p>
       </motion.div>
 
       <motion.div
@@ -162,15 +135,9 @@ export default function DashboardPage() {
               <stat.icon className="size-6 text-neo-black" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-muted-foreground">
-                {stat.label}
-              </p>
-              <p className="text-2xl font-extrabold tracking-tight">
-                {stat.value}
-              </p>
-              <p className="text-[11px] text-muted-foreground">
-                {stat.sublabel}
-              </p>
+              <p className="text-xs font-semibold text-muted-foreground">{stat.label}</p>
+              <p className="text-2xl font-extrabold tracking-tight">{stat.value}</p>
+              <p className="text-[11px] text-muted-foreground">{stat.sublabel}</p>
             </div>
           </motion.div>
         ))}
@@ -183,11 +150,7 @@ export default function DashboardPage() {
         animate="visible"
       >
         {quickActions.map((action) => (
-          <motion.div
-            key={action.label}
-            variants={fadeUp}
-            transition={{ duration: 0.4 }}
-          >
+          <motion.div key={action.label} variants={fadeUp} transition={{ duration: 0.4 }}>
             <Link
               href={action.href}
               className="flex items-center gap-3 rounded-xl border-2 border-neo-black bg-background px-5 py-4 font-semibold shadow-[3px_3px_0px_0px_#1B1B1B] transition-all hover:shadow-[1px_1px_0px_0px_#1B1B1B] hover:translate-x-0.5 hover:translate-y-0.5"
@@ -206,73 +169,13 @@ export default function DashboardPage() {
         transition={{ duration: 0.5, delay: 0.3 }}
       >
         <div className="xl:col-span-2">
-          <div className="rounded-xl border-2 border-neo-black bg-background shadow-[4px_4px_0px_0px_#1B1B1B]">
-            <div className="flex items-center justify-between border-b-2 border-neo-black px-5 py-4">
-              <h2 className="text-lg font-bold">Recent Quizzes</h2>
-              <Link href="/dashboard/quizzes">
-                <Button variant="ghost" size="sm">
-                  View all
-                </Button>
-              </Link>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-neo-black bg-secondary">
-                    <th className="px-5 py-3 text-left font-bold">Title</th>
-                    <th className="px-5 py-3 text-left font-bold">Status</th>
-                    <th className="px-5 py-3 text-left font-bold">Questions</th>
-                    <th className="px-5 py-3 text-left font-bold">Attempts</th>
-                    <th className="px-5 py-3 text-left font-bold">Date</th>
-                    <th className="px-5 py-3 text-left font-bold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentQuizzes.map((quiz, i) => (
-                    <motion.tr
-                      key={quiz.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 0.4 + i * 0.05 }}
-                      className="border-b border-border last:border-0"
-                    >
-                      <td className="px-5 py-3 font-medium">{quiz.title}</td>
-                      <td className="px-5 py-3">
-                        <StatusBadge status={quiz.status} />
-                      </td>
-                      <td className="px-5 py-3">{quiz.questions}</td>
-                      <td className="px-5 py-3">{quiz.attempts}</td>
-                      <td className="px-5 py-3 text-muted-foreground">
-                        {quiz.date}
-                      </td>
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-1">
-                          <Link
-                            href={`/dashboard/quizzes/${quiz.id}/edit`}
-                            className="p-1 text-muted-foreground hover:text-foreground"
-                          >
-                            <RiEditLine className="size-4" />
-                          </Link>
-                          <button
-                            type="button"
-                            className="p-1 text-muted-foreground hover:text-destructive"
-                          >
-                            <RiDeleteBinLine className="size-4" />
-                          </button>
-                          <button
-                            type="button"
-                            className="p-1 text-muted-foreground hover:text-foreground"
-                          >
-                            <RiMoreLine className="size-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-bold">Recent Quizzes</h2>
+            <Link href="/dashboard/quizzes">
+              <Button variant="ghost" size="sm">View all</Button>
+            </Link>
           </div>
+          <DataTable columns={quizColumns} data={recentQuizzes} pageSize={5} />
         </div>
 
         <div className="rounded-xl border-2 border-neo-black bg-background shadow-[4px_4px_0px_0px_#1B1B1B]">
@@ -291,9 +194,7 @@ export default function DashboardPage() {
                 <div className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
                 <div>
                   <p className="text-sm font-medium">{activity.text}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {activity.time}
-                  </p>
+                  <p className="text-xs text-muted-foreground">{activity.time}</p>
                 </div>
               </motion.div>
             ))}
@@ -301,19 +202,5 @@ export default function DashboardPage() {
         </div>
       </motion.div>
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span
-      className={
-        status === "published"
-          ? "inline-block rounded-md border-2 border-neo-black bg-success px-2 py-0.5 text-xs font-bold text-neo-black"
-          : "inline-block rounded-md border-2 border-neo-black bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground"
-      }
-    >
-      {status === "published" ? "Published" : "Draft"}
-    </span>
   );
 }

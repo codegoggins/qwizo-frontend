@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
 interface QuizHeaderProps {
@@ -37,9 +38,9 @@ function QuizHeader({
           Back to quizzes
         </Link>
         <div className="flex items-center gap-3">
-          <span className="rounded-md border-2 border-neo-black bg-secondary px-2.5 py-1 text-xs font-bold">
+          <Badge variant="default" className="px-2.5 py-1">
             {questionCount} {questionCount === 1 ? "question" : "questions"}
-          </span>
+          </Badge>
           <Button variant="outline" size="sm">
             Save Draft
           </Button>

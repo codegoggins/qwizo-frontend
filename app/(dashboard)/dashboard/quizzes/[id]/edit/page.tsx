@@ -8,6 +8,7 @@ import type { Question, QuestionType } from "@/lib/types/quiz";
 import { createQuestion } from "@/lib/quiz-helpers";
 import { sampleQuizzes } from "@/lib/sample-quiz";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { QuestionList } from "@/components/quiz-builder/question-list";
 import { EditToolbar } from "@/components/quiz-builder/edit-toolbar";
@@ -100,9 +101,9 @@ export default function EditQuizPage({ params }: { params: Promise<{ id: string 
               Back to quizzes
             </Link>
             <div className="flex items-center gap-3">
-              <span className="rounded-md border-2 border-neo-black bg-secondary px-2.5 py-1 text-xs font-bold">
+              <Badge variant="default" className="px-2.5 py-1">
                 {questions.length} {questions.length === 1 ? "question" : "questions"}
-              </span>
+              </Badge>
               <Button variant="outline" size="sm">Save Draft</Button>
               <Button variant="success" size="sm">Update</Button>
             </div>

@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { type ColumnDef } from "@tanstack/react-table"
 import {
   RiAddCircleLine,
   RiFileListLine,
@@ -12,12 +13,12 @@ import {
   RiSearchLine,
   RiEditLine,
   RiSettingsLine,
-  RiArrowLeftSLine,
-  RiArrowRightSLine,
   RiTrophyLine,
 } from "react-icons/ri"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { DataTable } from "@/components/ui/data-table"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -53,7 +54,19 @@ const topTopics = [
   { name: "CSS", count: 1 },
 ]
 
-const quizzes = [
+interface QuizRow {
+  id: string
+  title: string
+  description: string
+  status: string
+  questions: number
+  attempts: number
+  avgScore: string
+  date: string
+  topic: string
+}
+
+const quizzes: QuizRow[] = [
   { id: "1", title: "JavaScript Basics", description: "Core JS concepts — variables, functions, closures, and more.", status: "published", questions: 15, attempts: 234, avgScore: "82%", date: "Apr 10, 2026", topic: "JavaScript" },
   { id: "2", title: "React Fundamentals", description: "Components, hooks, state management, and lifecycle.", status: "published", questions: 20, attempts: 189, avgScore: "74%", date: "Apr 8, 2026", topic: "React" },
   { id: "3", title: "System Design 101", description: "Intro to scalability, load balancing, and caching.", status: "draft", questions: 10, attempts: 0, avgScore: "—", date: "Apr 7, 2026", topic: "System Design" },
@@ -64,24 +77,65 @@ const quizzes = [
   { id: "8", title: "React Advanced Patterns", description: "Compound components, render props, and HOCs.", status: "archived", questions: 14, attempts: 88, avgScore: "59%", date: "Mar 20, 2026", topic: "React" },
 ]
 
-const PAGE_SIZE = 5
+const quizColumns: ColumnDef<QuizRow, unknown>[] = [
+  {
+    accessorKey: "title",
+    header: "Quiz",
+    cell: ({ row }) => (
+      <div>
+        <p className="font-semibold">{row.original.title}</p>
+        <p className="text-xs text-muted-foreground">{row.original.description}</p>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ getValue }) => {
+      const status = getValue() as string;
+      const variant = status === "published" ? "success" : status === "archived" ? "archived" : "warning";
+      return <Badge variant={variant}>{status.charAt(0).toUpperCase() + status.slice(1)}</Badge>;
+    },
+  },
+  {
+    accessorKey: "topic",
+    header: "Topic",
+    cell: ({ getValue }) => <Badge variant="default">{getValue() as string}</Badge>,
+  },
+  { accessorKey: "questions", header: "Questions" },
+  { accessorKey: "attempts", header: "Attempts" },
+  { accessorKey: "avgScore", header: "Avg Score", cell: ({ getValue }) => <span className="font-semibold">{getValue() as string}</span> },
+  { accessorKey: "date", header: "Created", cell: ({ getValue }) => <span className="text-muted-foreground">{getValue() as string}</span> },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1">
+        <Link href={`/dashboard/quizzes/${row.original.id}/edit`} title="Edit" className="p-1 text-muted-foreground hover:text-foreground">
+          <RiEditLine className="size-4" />
+        </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/preview`} title="Preview" className="p-1 text-muted-foreground hover:text-foreground">
+          <RiEyeLine className="size-4" />
+        </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/settings`} title="Settings" className="p-1 text-muted-foreground hover:text-foreground">
+          <RiSettingsLine className="size-4" />
+        </Link>
+      </div>
+    ),
+  },
+]
 
 export default function QuizzesPage() {
   const [activeFilter, setActiveFilter] = useState<Filter>("All")
   const [search, setSearch] = useState("")
-  const [page, setPage] = useState(1)
 
-  const filtered = quizzes.filter((q) => {
-    const matchesFilter =
-      activeFilter === "All" || q.status === activeFilter.toLowerCase()
+  const filtered = useMemo(() => quizzes.filter((q) => {
+    const matchesFilter = activeFilter === "All" || q.status === activeFilter.toLowerCase()
     const matchesSearch =
       q.title.toLowerCase().includes(search.toLowerCase()) ||
       q.topic.toLowerCase().includes(search.toLowerCase())
     return matchesFilter && matchesSearch
-  })
-
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
-  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  }), [activeFilter, search])
 
   return (
     <div className="flex flex-col gap-10">
@@ -171,15 +225,15 @@ export default function QuizzesPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="rounded-xl border-2 border-neo-black bg-background shadow-[4px_4px_0px_0px_#1B1B1B]"
+        className="flex flex-col gap-4"
       >
-        <div className="flex flex-col gap-4 border-b-2 border-neo-black p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-1">
             {filters.map((f) => (
               <button
                 key={f}
                 type="button"
-                onClick={() => { setActiveFilter(f); setPage(1) }}
+                onClick={() => setActiveFilter(f)}
                 className={
                   activeFilter === f
                     ? "rounded-md border-2 border-neo-black bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground"
@@ -195,14 +249,14 @@ export default function QuizzesPage() {
             <Input
               placeholder="Search quizzes..."
               value={search}
-              onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+              onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
             />
           </div>
         </div>
 
-        {paginated.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 py-16 text-center">
+        {filtered.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-border py-16 text-center">
             <RiFileListLine className="size-10 text-muted-foreground" />
             <p className="text-sm font-medium text-muted-foreground">No quizzes found.</p>
             <Link href="/dashboard/quizzes/create">
@@ -210,120 +264,9 @@ export default function QuizzesPage() {
             </Link>
           </div>
         ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-neo-black bg-secondary">
-                    <th className="px-5 py-3 text-left font-bold">Quiz</th>
-                    <th className="px-5 py-3 text-left font-bold">Status</th>
-                    <th className="px-5 py-3 text-left font-bold">Topic</th>
-                    <th className="px-5 py-3 text-left font-bold">Questions</th>
-                    <th className="px-5 py-3 text-left font-bold">Attempts</th>
-                    <th className="px-5 py-3 text-left font-bold">Avg Score</th>
-                    <th className="px-5 py-3 text-left font-bold">Created</th>
-                    <th className="px-5 py-3 text-left font-bold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginated.map((quiz, i) => (
-                    <motion.tr
-                      key={quiz.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="border-b border-border last:border-0"
-                    >
-                      <td className="px-5 py-3">
-                        <p className="font-semibold">{quiz.title}</p>
-                        <p className="text-xs text-muted-foreground">{quiz.description}</p>
-                      </td>
-                      <td className="px-5 py-3">
-                        <StatusBadge status={quiz.status} />
-                      </td>
-                      <td className="px-5 py-3">
-                        <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium">{quiz.topic}</span>
-                      </td>
-                      <td className="px-5 py-3">{quiz.questions}</td>
-                      <td className="px-5 py-3">{quiz.attempts}</td>
-                      <td className="px-5 py-3 font-semibold">{quiz.avgScore}</td>
-                      <td className="px-5 py-3 text-muted-foreground">{quiz.date}</td>
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-1">
-                          <Link href={`/dashboard/quizzes/${quiz.id}/edit`} title="Edit" className="p-1 text-muted-foreground hover:text-foreground">
-                            <RiEditLine className="size-4" />
-                          </Link>
-                          <Link href={`/dashboard/quizzes/${quiz.id}/preview`} title="Preview" className="p-1 text-muted-foreground hover:text-foreground">
-                            <RiEyeLine className="size-4" />
-                          </Link>
-                          <Link href={`/dashboard/quizzes/${quiz.id}/settings`} title="Settings" className="p-1 text-muted-foreground hover:text-foreground">
-                            <RiSettingsLine className="size-4" />
-                          </Link>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between border-t-2 border-neo-black px-5 py-3">
-                <p className="text-xs text-muted-foreground">
-                  Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
-                </p>
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    disabled={page === 1}
-                    onClick={() => setPage(page - 1)}
-                    className="flex size-8 items-center justify-center border-2 border-neo-black bg-background font-bold hover:bg-muted disabled:opacity-40"
-                  >
-                    <RiArrowLeftSLine className="size-4" />
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setPage(i + 1)}
-                      className={
-                        page === i + 1
-                          ? "flex size-8 items-center justify-center border-2 border-neo-black bg-primary text-xs font-bold text-primary-foreground"
-                          : "flex size-8 items-center justify-center border-2 border-neo-black bg-background text-xs font-bold hover:bg-muted"
-                      }
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    disabled={page === totalPages}
-                    onClick={() => setPage(page + 1)}
-                    className="flex size-8 items-center justify-center border-2 border-neo-black bg-background font-bold hover:bg-muted disabled:opacity-40"
-                  >
-                    <RiArrowRightSLine className="size-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
+          <DataTable columns={quizColumns} data={filtered} pageSize={5} />
         )}
       </motion.div>
-
     </div>
-  )
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    published: "bg-success text-neo-black",
-    draft: "bg-muted text-muted-foreground",
-    archived: "bg-border text-muted-foreground",
-  }
-
-  return (
-    <span className={`inline-block rounded-md border-2 border-neo-black px-2 py-0.5 text-xs font-bold ${styles[status]}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
   )
 }
