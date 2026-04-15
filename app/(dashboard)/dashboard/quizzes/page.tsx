@@ -253,9 +253,9 @@ export default function QuizzesPage() {
                       <td className="px-5 py-3 text-muted-foreground">{quiz.date}</td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-1">
-                          <button type="button" title="Edit" className="p-1 text-muted-foreground hover:text-foreground">
+                          <Link href={`/dashboard/quizzes/${quiz.id}/edit`} title="Edit" className="p-1 text-muted-foreground hover:text-foreground">
                             <RiEditLine className="size-4" />
-                          </button>
+                          </Link>
                           <button type="button" title="Share" className="p-1 text-muted-foreground hover:text-foreground">
                             <RiShareLine className="size-4" />
                           </button>
