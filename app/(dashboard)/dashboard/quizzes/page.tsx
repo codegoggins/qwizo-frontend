@@ -120,6 +120,9 @@ const quizColumns: ColumnDef<QuizRow, unknown>[] = [
         <Link href={`/dashboard/quizzes/${row.original.id}/settings`} title="Settings" className="p-1 text-muted-foreground hover:text-foreground">
           <RiSettingsLine className="size-4" />
         </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/leaderboard`} title="Leaderboard" className="p-1 text-muted-foreground hover:text-warning">
+          <RiTrophyLine className="size-4" />
+        </Link>
       </div>
     ),
   },

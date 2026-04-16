@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select } from "@/components/ui/select";
 import { Modal, ModalHeader, ModalTitle, ModalDescription, ModalContent, ModalFooter } from "@/components/ui/modal";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const visibilityOptions = [
   { value: "public", label: "Public — anyone with the link" },
@@ -67,6 +68,9 @@ export default function QuizSettingsPage({ params }: { params: Promise<{ id: str
   const [timePerQuestion, setTimePerQuestion] = useState("30");
   const [totalTime, setTotalTime] = useState("15");
   const [passingScore, setPassingScore] = useState("60");
+  const [scheduleAttempts, setScheduleAttempts] = useState(false);
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -302,6 +306,39 @@ export default function QuizSettingsPage({ params }: { params: Promise<{ id: str
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.35 }}
+        className="rounded-xl border-2 border-neo-black bg-background p-6 shadow-[4px_4px_0px_0px_#1B1B1B]"
+      >
+        <h2 className="mb-5 text-lg font-bold">Scheduling</h2>
+        <ToggleRow
+          label="Schedule quiz availability"
+          description="Set when participants can start and stop attempting"
+          checked={scheduleAttempts}
+          onChange={setScheduleAttempts}
+        />
+        {scheduleAttempts && (
+          <div className="mt-5 grid gap-4 border-t-2 border-border pt-5 md:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-semibold">Opens at</label>
+              <DatePicker value={startDate} onChange={setStartDate} showSeconds={false} />
+              <p className="text-xs text-muted-foreground">
+                Participants can start attempting from this time.
+              </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-semibold">Closes at</label>
+              <DatePicker value={endDate} onChange={setEndDate} showSeconds={false} />
+              <p className="text-xs text-muted-foreground">
+                Quiz will stop accepting attempts after this time. Leaderboard freezes.
+              </p>
+            </div>
+          </div>
+        )}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
         className="rounded-xl border-2 border-destructive bg-background p-6 shadow-[4px_4px_0px_0px_#1B1B1B]"
       >
         <h2 className="mb-2 text-lg font-bold text-destructive">Danger Zone</h2>

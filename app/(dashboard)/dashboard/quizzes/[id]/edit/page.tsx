@@ -105,7 +105,7 @@ export default function EditQuizPage({ params }: { params: Promise<{ id: string 
                 {questions.length} {questions.length === 1 ? "question" : "questions"}
               </Badge>
               <Button variant="outline" size="sm">Save Draft</Button>
-              <Button variant="success" size="sm">Update</Button>
+              <Button variant="success" size="sm">Publish</Button>
             </div>
           </div>
 

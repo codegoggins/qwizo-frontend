@@ -37,7 +37,7 @@ const sections = [
     label: "Analytics",
     items: [
       { name: "Overview", href: "/dashboard/analytics", icon: RiBarChartLine },
-      { name: "Leaderboards", href: "/dashboard/leaderboards", icon: RiTrophyLine },
+      { name: "Leaderboard", href: "/dashboard/leaderboard", icon: RiTrophyLine },
     ],
   },
   {

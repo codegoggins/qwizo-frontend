@@ -15,6 +15,7 @@ import {
   RiEditLine,
   RiEyeLine,
   RiSettingsLine,
+  RiTrophyLine,
 } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -90,6 +91,9 @@ const quizColumns: ColumnDef<RecentQuiz, unknown>[] = [
         </Link>
         <Link href={`/dashboard/quizzes/${row.original.id}/settings`} className="p-1 text-muted-foreground hover:text-foreground">
           <RiSettingsLine className="size-4" />
+        </Link>
+        <Link href={`/dashboard/quizzes/${row.original.id}/leaderboard`} className="p-1 text-muted-foreground hover:text-warning">
+          <RiTrophyLine className="size-4" />
         </Link>
       </div>
     ),
