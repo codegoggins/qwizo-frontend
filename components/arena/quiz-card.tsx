@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -14,6 +15,7 @@ import {
 import type { ArenaQuiz } from "@/lib/types/arena";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { EnrollModal } from "@/components/arena/enroll-modal";
 
 const difficultyStyles: Record<string, { label: string; variant: "success" | "warning" | "destructive" }> = {
   easy: { label: "Easy", variant: "success" },
@@ -53,7 +55,7 @@ function StatusBadge({ status, endsAt, startsAt }: { status: ArenaQuiz["status"]
   );
 }
 
-function ActionButton({ quiz }: { quiz: ArenaQuiz }) {
+function ActionButton({ quiz, onEnrollClick }: { quiz: ArenaQuiz; onEnrollClick: () => void }) {
   if (quiz.status === "ended") {
     return (
       <Link href={`/arena/${quiz.id}/leaderboard`} className="w-full">
@@ -77,13 +79,13 @@ function ActionButton({ quiz }: { quiz: ArenaQuiz }) {
   }
   if (quiz.status === "upcoming") {
     return (
-      <Link href={`/login?redirect=/arena/${quiz.id}`} className="w-full">
-        <Button variant="outline" className="w-full">Enroll</Button>
-      </Link>
+      <Button variant="outline" className="w-full" onClick={onEnrollClick}>
+        Enroll
+      </Button>
     );
   }
   return (
-    <Link href={`/login?redirect=/arena/${quiz.id}/play`} className="w-full">
+    <Link href={`/arena/${quiz.id}/play`} className="w-full">
       <Button variant={quiz.status === "live" ? "success" : "default"} className="w-full">
         Start Quiz
       </Button>
@@ -97,8 +99,10 @@ interface QuizCardProps {
 
 function QuizCard({ quiz }: QuizCardProps) {
   const diff = difficultyStyles[quiz.difficulty];
+  const [enrollOpen, setEnrollOpen] = useState(false);
 
   return (
+    <>
     <motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
@@ -159,9 +163,11 @@ function QuizCard({ quiz }: QuizCardProps) {
           </div>
         </div>
 
-        <ActionButton quiz={quiz} />
+        <ActionButton quiz={quiz} onEnrollClick={() => setEnrollOpen(true)} />
       </div>
     </motion.div>
+    <EnrollModal quiz={quiz} open={enrollOpen} onClose={() => setEnrollOpen(false)} />
+    </>
   );
 }
 

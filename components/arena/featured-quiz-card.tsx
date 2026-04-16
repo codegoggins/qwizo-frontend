@@ -97,7 +97,7 @@ function FeaturedQuizCard({ quiz }: FeaturedQuizCardProps) {
             </div>
           </div>
 
-          <Link href={`/login?redirect=/arena/${quiz.id}/play`}>
+          <Link href={`/arena/${quiz.id}/play`}>
             <Button variant="success" size="lg" className="w-full">
               Start Challenge
             </Button>
