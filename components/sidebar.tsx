@@ -14,6 +14,7 @@ import {
   RiUserLine,
   RiCloseLine,
   RiVipCrownLine,
+  RiSwordLine,
 } from "react-icons/ri"
 import { Logo } from "@/components/logo"
 import { cn } from "@/lib/utils"
@@ -24,6 +25,7 @@ const sections = [
     items: [
       { name: "Dashboard", href: "/dashboard", icon: RiDashboardLine },
       { name: "My Quizzes", href: "/dashboard/quizzes", icon: RiFileListLine },
+      { name: "Arena", href: "/arena", icon: RiSwordLine },
     ],
   },
   {
