@@ -51,6 +51,7 @@ const sections = [
   {
     label: "Settings",
     items: [
+      { name: "Profile", href: "/dashboard/profile", icon: RiUserLine },
       { name: "Account", href: "/dashboard/settings", icon: RiUserLine },
       { name: "Preferences", href: "/dashboard/preferences", icon: RiSettingsLine },
     ],

@@ -109,8 +109,6 @@ function QuizCard({ quiz }: QuizCardProps) {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col overflow-hidden rounded-xl border-2 border-neo-black bg-background shadow-[4px_4px_0px_0px_#1B1B1B] transition-shadow hover:shadow-[6px_6px_0px_0px_#1B1B1B]"
     >
-      <div className="h-2 w-full" style={{ backgroundColor: quiz.topicColor }} />
-
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-start justify-between gap-2">
           <StatusBadge status={quiz.status} endsAt={quiz.endsAt} startsAt={quiz.startsAt} />
